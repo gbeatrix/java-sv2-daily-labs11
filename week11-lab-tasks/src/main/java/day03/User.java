@@ -19,7 +19,7 @@ public class User {
     }
 
     public List<Item> getItems() {
-        return items;
+        return List.copyOf(items);
     }
 
     public int getMoney() {

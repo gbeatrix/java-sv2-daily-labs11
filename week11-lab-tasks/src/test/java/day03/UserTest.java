@@ -7,30 +7,49 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
-
     User user = new User("John", 120_000);
 
     @Test
-    void addItemTest() {
-        Item item = new Product("milk", 100);
-
-        user.addItem(item);
-
-        assertEquals(119_890, user.getMoney());
-        assertEquals(LocalDate.of(2025, 1, 6), user.getItems().get(0).expiryDate);
-        assertEquals("milk", user.getItems().get(0).getName());
+    void testCreateUser() {
         assertEquals("John", user.getUserName());
+        assertEquals(120000, user.getMoney());
+        assertTrue(user.getItems().isEmpty());
     }
 
     @Test
-    void addItemNotEnoughMoney() {
-        Item item = new Product("tv", 120_001);
-
-        IllegalArgumentException expected = assertThrows(IllegalArgumentException.class,
-                () -> user.addItem(item));
-
-        assertEquals("Not enough money.", expected.getMessage());
+    void testAddProductWithExtendedGuarantee() {
+        user.addItem(new Product("headset", 15000));
+        assertEquals(103500, user.getMoney());
+        assertEquals(LocalDate.now().plusYears(3), user.getItems().get(0).getExpiryDate());
+        assertEquals("headset", user.getItems().get(0).getName());
     }
 
     @Test
+    void testAddProductWithoutExtendedGuarantee() {
+        user.addItem(new Product("furniture", 75000));
+        assertEquals(45000, user.getMoney());
+        assertEquals(LocalDate.now().plusMonths(3), user.getItems().get(0).getExpiryDate());
+        assertEquals("furniture", user.getItems().get(0).getName());
+    }
+
+    @Test
+    void testAddItemNotEnoughMoney() {
+        Product product = new Product("product", 120_001);
+        IllegalArgumentException errProduct = assertThrows(IllegalArgumentException.class,
+                () -> user.addItem(product));
+        assertEquals("Not enough money.", errProduct.getMessage());
+        Service service = new Service("service", 120_001);
+        IllegalArgumentException errService = assertThrows(IllegalArgumentException.class,
+                () -> user.addItem(service));
+        assertEquals("Not enough money.", errService.getMessage());
+        assertTrue(user.getItems().isEmpty());
+    }
+
+    @Test
+    void testAddService() {
+        user.addItem(new Service("car washing", 8400));
+        assertEquals(111600, user.getMoney());
+        assertEquals(LocalDate.now().plusYears(1), user.getItems().get(0).getExpiryDate());
+        assertEquals("car washing", user.getItems().get(0).getName());
+    }
 }
