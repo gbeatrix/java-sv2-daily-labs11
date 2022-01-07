@@ -30,7 +30,6 @@ class LotteryTest {
         assertEquals(5, result.size());
         for (int k : result) {
             assertTrue(0 < k && k <= 90);
-            ;
             assertFalse(unique.contains(k));
             unique.add(k);
         }
@@ -44,7 +43,6 @@ class LotteryTest {
         assertEquals(6, result.size());
         for (int k : result) {
             assertTrue(0 < k && k <= 45);
-            ;
             assertFalse(unique.contains(k));
             unique.add(k);
         }
