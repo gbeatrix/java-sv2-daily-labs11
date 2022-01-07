@@ -47,4 +47,14 @@ class LotteryTest {
             unique.add(k);
         }
     }
+
+    @Test
+    void testInvalidParams() {
+        IllegalArgumentException err = assertThrows(IllegalArgumentException.class,
+                () -> new Lottery(90, 0));
+        assertEquals("Invalid parameters", err.getMessage());
+
+        assertThrows(IllegalArgumentException.class,
+                () -> new Lottery(6, 45));
+    }
 }

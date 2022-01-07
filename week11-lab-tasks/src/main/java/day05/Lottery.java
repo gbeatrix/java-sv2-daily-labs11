@@ -14,6 +14,9 @@ public class Lottery {
     }
 
     public Lottery(int numbers, int tips, Random random) {
+        if (numbers < tips || tips <= 0) {
+            throw new IllegalArgumentException("Invalid parameters");
+        }
         this.numbers = numbers;
         this.tips = tips;
         this.random = random;
